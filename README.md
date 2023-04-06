@@ -6,7 +6,7 @@ one model (for predicting the shelf life of banana) is deployed via this API.
 
 Requirements:
 Download the model into the working directory from the following link:
-https://drive.google.com/file/d/1yJc0VSx9vfc42bq47ff01ouHdiE2n2aS/view?usp=share_link
+https://drive.google.com/file/d/1U4mcFEBwPIqJyLzqo2j-fOT_cD5bj7KF/view?usp=sharing
 
 Run the following commands in your working directory:
 
