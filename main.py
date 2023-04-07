@@ -8,7 +8,7 @@ from tensorflow.python.keras.models import load_model
 
 app = Flask(__name__)
 
-predict_model_path = 'banana_predict_shelf_v2.h5' #Enter the path of the shelf-life model
+predict_model_path = 'banana_custom_model.h5' #Enter the path of the shelf-life model
 predict_model = load_model(predict_model_path, compile = False)
 
 UPLOAD_FOLDER = 'uploads'
@@ -45,17 +45,22 @@ def upload_file():
 
 def preprocess(img_path):
     labels_predict = {0: '3 - 4 ', 1: '5 - 8 ', 2: '1 ', 3: '2 - 3 ', 4: '0 ', 5: '6 - 7 '}
-    img = load_img(img_path, target_size=(300, 300))
-    x = img_to_array(img)
-    x = np.expand_dims(img, axis = 0)
-    answer = predict_model.predict(x)
-    y_class = answer.argmax(axis=-1)
-    print(y_class)
-    y = " ".join(str(x) for x in y_class)
-    y = int(y)
-    res = labels_predict[y]
-    print(res)
-    return res.capitalize()
+    days_shelf = ['3 - 4 ','6 - 7 ', '1' , '2 - 3 ' , '0','5 - 6']
+    img = Image.open(img_path)
+    img = img.resize((256, 256))
+    
+    # Convert PIL image to numpy array
+    img_array = img_to_array(img)
+    
+    # Normalize pixel values
+    img = np.expand_dims(img, axis=0)
+    img = img / 255.0
+
+    # make predictions
+    prediction = predict_model.predict(img)
+    predicted_class = np.argmax(prediction)
+    predicted_label = days_shelf[predicted_class]
+    return predicted_label
 
 if __name__ == '__main__':
     app.run(debug=True)
